@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hiro.studentlistspring.dto.StudentDTO;
+import com.hiro.studentlistspring.dto.StudentResponse;
 import com.hiro.studentlistspring.model.Student;
 import com.hiro.studentlistspring.service.StudentService;
 
@@ -50,6 +51,23 @@ public class StudentController {
 
         try {
             List<Student> students = this.studentService.findAll();
+
+            if (students.size() != 0) {
+                return ResponseEntity.status(HttpStatus.OK).body(students);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/withCourses")
+    public ResponseEntity<List<StudentResponse>> getAllWithCourses() {
+        try {
+            List<StudentResponse> students = this.studentService.findAllWithCourses();
 
             if (students.size() != 0) {
                 return ResponseEntity.status(HttpStatus.OK).body(students);

@@ -9,14 +9,14 @@ public class StudentResponse {
     private String name;
     private String lastname;
     private String enrollment;
-    private List<CourseResponse> coursesResponse;
+    private List<CourseResponse> courses;
 
-    public StudentResponse(UUID id, String name, String lastname, String enrollment, List<CourseResponse> coursesResponse) {
+    public StudentResponse(UUID id, String name, String lastname, String enrollment, List<CourseResponse> courses) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.enrollment = enrollment;
-        this.coursesResponse = coursesResponse;
+        this.courses = courses;
     }
 
     public UUID getId() {
@@ -51,12 +51,12 @@ public class StudentResponse {
         this.enrollment = enrollment;
     }
 
-    public List<CourseResponse> getCoursesResponse() {
-        return coursesResponse;
+    public List<CourseResponse> getCourses() {
+        return courses;
     }
 
-    public void setCoursesResponse(List<CourseResponse> coursesResponse) {
-        this.coursesResponse = coursesResponse;
+    public void setCoursesResponse(List<CourseResponse> courses) {
+        this.courses = courses;
     }
     
 }

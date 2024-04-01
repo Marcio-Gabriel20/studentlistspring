@@ -1,5 +1,6 @@
 package com.hiro.studentlistspring.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -10,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.hiro.studentlistspring.dto.CourseResponse;
 import com.hiro.studentlistspring.dto.StudentDTO;
+import com.hiro.studentlistspring.dto.StudentResponse;
 import com.hiro.studentlistspring.mapper.StudentMapper;
 import com.hiro.studentlistspring.model.Course;
 import com.hiro.studentlistspring.model.Student;
@@ -60,6 +63,37 @@ public class StudentService {
             e.printStackTrace();
         }
 
+        return null;
+    }
+
+    public List<StudentResponse> findAllWithCourses() {
+        try {
+            List<Student> students = this.studentRepository.findAll();
+            List<Course> courses = this.courseRepository.findAll();
+            List<StudentResponse> studentListWithCourse = new ArrayList<>();
+            List<CourseResponse> coursesStudents = new ArrayList<>();
+
+            if (students != null) {
+                for (Student student : students) {
+                    if (courses != null) {
+                        for (Course course : courses) {
+                            if (course.getStudents().contains(student)) {
+                                coursesStudents.add(
+                                        new CourseResponse(course.getId(), course.getName(), course.getDescription()));
+                            }
+                        }
+
+                        studentListWithCourse.add(new StudentResponse(student.getId(), student.getName(),
+                                student.getLastname(), student.getEnrollment(), coursesStudents));
+                    }
+                }
+
+                return studentListWithCourse;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         return null;
     }
     
