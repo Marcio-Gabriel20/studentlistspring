@@ -1,8 +1,6 @@
 package com.hiro.studentlistspring.service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -91,16 +89,22 @@ public class CourseService {
                 Optional<Course> course = this.courseRepository.findById(id);
 
                 if (course.isPresent()) {
-                    Map<String, Object> updatedFields = new HashMap<>();
-                    updatedFields.put("name", courseDto.name());
-                    updatedFields.put("description", courseDto.description());
+                    if (courseDto.name() != null
+                            && !courseDto.name().equals(course.get().getName())) {
+                        course.get().setName(courseDto.name());
+                    }
+                    
+                    if (courseDto.description() != null
+                        && !courseDto.description().equals(course.get().getDescription())) {
+                        course.get().setDescription(courseDto.description());
+                    }
+
+                    this.courseRepository.save(course.get());
+
+                    return ResponseEntity.status(HttpStatus.OK).build();
                 } else {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
                 }
-
-                this.courseRepository.save(course.get());
-
-                return ResponseEntity.status(HttpStatus.OK).build();
             } catch (Exception e) {
                 e.printStackTrace();
 

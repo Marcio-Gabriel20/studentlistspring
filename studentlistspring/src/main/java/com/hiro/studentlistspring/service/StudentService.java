@@ -1,8 +1,6 @@
 package com.hiro.studentlistspring.service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
@@ -88,7 +86,7 @@ public class StudentService {
             }
         }
 
-        return null;
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
     }
 
     @SuppressWarnings("null")
@@ -98,16 +96,22 @@ public class StudentService {
                 Optional<Student> student = this.studentRepository.findById(id);
 
                 if (student.isPresent()) {
-                    Map<String, Object> updatedFields = new HashMap<>();
-                    updatedFields.put("name", studentDto.name());
-                    updatedFields.put("lastname", studentDto.lastname());
+                    if(studentDto.name() != null
+                            && !studentDto.name().equals(student.get().getName())) {
+                        student.get().setName(studentDto.name());
+                    }
+
+                    if(studentDto.lastname() != null
+                            && !studentDto.lastname().equals(student.get().getLastname())) {
+                        student.get().setLastname(studentDto.lastname());
+                    }
+
+                    this.studentRepository.save(student.get());
+
+                    return ResponseEntity.status(HttpStatus.OK).build();
                 } else {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
                 }
-
-                this.studentRepository.save(student.get());
-
-                return ResponseEntity.status(HttpStatus.OK).build();
             } catch (Exception e) {
                 e.printStackTrace();
 
