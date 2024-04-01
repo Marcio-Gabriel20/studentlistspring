@@ -1,0 +1,17 @@
+version: '3.1'
+
+services:
+  db:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: studentlistspring
+    ports:
+      - "3307:3306" # Mapeia a porta 3306 do MySQL para a porta 3307 do host
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
